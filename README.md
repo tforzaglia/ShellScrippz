@@ -50,7 +50,7 @@ xcode is now running under PID 1509
 ```
 
 ### Rotate Logs
-This is a simple log rotation script which can be added to cron tab to make it run automatically. A few parts of the script need to be edited based on a user's specific situation.     
+This is a simple log rotation script which can be added to cron tab to make it run automatically. It will redirect output of an active log to a new .gz file and null the log being actively written to. Also removes the oldest two logs if there are more than 10 gzipped logs in the directory. This threshold can be modified to compensate for the size of directory. A few parts of the script need to be edited based on a user's specific situation.     
 The following lines in particular should be customized:
 ```
 cd /Users/forzaglia/Documents/test
