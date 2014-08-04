@@ -17,7 +17,7 @@ else
     app=$1;
 
     #find the PID
-    pid=`ps -ef | grep -i $app | grep -v grep | awk '! /0:00.00/ {print $2 ;}'`
+    pid=`ps -ef | grep -i $app | grep -v grep | grep -v bounce.sh | awk '! /0:00.00/ {print $2 ;}'`
 
     #test if the length of the PID string is empty
     if [[ -z $pid ]]; then
@@ -31,6 +31,10 @@ else
         #if the user enters 'y', start the app
         if [ $choice == 'y' ]; then
             open -a /Applications/$app.app
+
+	    #get and report the new PID of the app
+            pid=`ps -ef | grep -i $app | grep -v grep | grep -v bounce.sh | awk '! /0:00.00/ {print $2 ;}'`
+            echo "$app is now running under PID $pid"
         
         #if the user enters anything else, terminate execution of the script
         else
@@ -43,13 +47,28 @@ else
         #Print out the PID of the application
         echo "$app is running under $pid"
 
-        #kill the application
-        kill -3 $pid
+	echo "Are you sure you want to restart $app [y/n]?"
 
-        #sleep for 5 seconds
-        sleep  5
+	#read in the user input
+        read choice
 
-        #start the app back up
-        open -a /Applications/$app.app/
+        #if the user enters 'y', start the app
+        if [ $choice == 'y' ]; then
+
+        	#kill the application
+        	kill -3 $pid >/dev/null 2>/dev/null
+
+        	#sleep for 5 seconds
+        	sleep  5
+
+        	#start the app back up
+        	open -a /Applications/$app.app/
+
+		#get and report the new PID of the app
+    		pid=`ps -ef | grep -i $app | grep -v grep | grep -v bounce.sh | awk '! /0:00.00/ {print $2 ;}'`
+		echo "$app is now running under PID $pid"
+	else
+		echo "Cancelling the bounce of $app"
+    	fi
     fi
 fi
