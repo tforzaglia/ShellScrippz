@@ -20,7 +20,7 @@ else
     pid=`ps -ef | grep -i $app | grep -v grep | awk '! /0:00.00/ {print $2 ;}'`
 
     #test if the length of the PID string is empty
-    if [ -z $pid ]; then
+    if [[ -z $pid ]]; then
 
         #PID is empty meaning the provided app is not running. Ask if the user wants to start the app
         echo "$app is not currently running. Would you like to start it [y/n]?"
